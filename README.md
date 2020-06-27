@@ -1,5 +1,5 @@
-# Geometric-Computing
-Draw shapes using geometric computing
+## Geometric-Computing
+# Draw shapes using geometric computing
 Given of set of point that ranges from 0 < x< 500 and 0 < y < 500
 The code can do three things
 1.
