@@ -10,5 +10,5 @@ Note that the boundry limits of x and y coordinates :  0 < x< 500 and 0 < y < 50
 
 ### run code
 ```
-```bash
 c++ curb_reconstruction.cpp -lX11 -lm -L/usr/X11R6/lib
+```
