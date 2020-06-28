@@ -25,7 +25,7 @@ typedef struct Edge Edge;
 typedef struct Point{
         float x, y;        
         int n;
-        // if point left and point are equal return true else false
+        // if point left and right point are equal return true else false
          friend bool operator ==(const Point& lhs, const Point& rhs)
         {
             return (lhs.x == rhs.x && lhs.y ==rhs.y) ? true : false;
@@ -42,9 +42,8 @@ struct Triangle{
     float radius;
 };//edge
 struct Edge{
-    Point start,dest;
-    int n;
-    Point left,right;
+    Point start,dest; // edge.start ---> edge.dest
+    int n;//index
     Triangle *adj_r,*adj_l;
     bool visited;
     friend bool operator ==(const Edge& lhs, const Edge& rhs){ 
@@ -60,11 +59,13 @@ struct Edge{
 float orientation(Point O, Point A, Point B) { 
 	return ((A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x)); 
 } 
+/* swap function for the bubble sort*/
 void swap_p(Point *p1,Point *p2){
     Point temp = *p1;
     *p1 = *p2;
     *p2 = temp;
 }
+// sort the x coordinates
 void bubbleSortx(std::vector<Point> &points){
     int i,j,n=points.size();
 
@@ -76,6 +77,7 @@ void bubbleSortx(std::vector<Point> &points){
         }
     } 
 }
+//sort the y cordinates
 void bubbleSorty(std::vector<Point> &points){
     int i,j,n=points.size();
 
@@ -98,8 +100,8 @@ void bubbleSorty(std::vector<Point> &points){
     D3= sqrt((X-C.x)^2 + ((Y-C.y)^2)
     then we have D1=D2=D3
     solve for X,Y using equation 
-    D1= D2 q1
-    D1=D3 q2
+    D1 = D2 q1.
+    D1 =D3 q2.
     where X=cm.x  snd Y = cm.y
 
 */
@@ -125,6 +127,7 @@ Point circumCenter(Point A, Point B, Point C,float &r){
     // returns point(x,y) of the circum center
     return cm;
 }
+//find is an edge is in a triangle
 bool edgeInTriangle(Edge e, Triangle t){
     Point a= t.pi, b=t.pj, c=t.pk;
     //edg e = e.start -> e.destinatin
@@ -142,6 +145,7 @@ bool edgeInTriangle(Edge e, Triangle t){
     return false;
 }
 //get all not reapeated edges of the triangle
+//This function takes a set of triangle and removes moves all repeated edges and returns 
 std::vector<Edge> edgeReconstruction(std::vector<Triangle> T){
     std::vector<Edge>edgs;
     Edge e;
