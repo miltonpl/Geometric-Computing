@@ -179,12 +179,12 @@ std::vector<Edge> edgeReconstruction(std::vector<Triangle> T){
 void adjacent_tringle(std::vector<Edge> &vec_edgs,std::vector<Triangle> &T){
     //return all not repeated edges of triangle
     vec_edgs = edgeReconstruction(T);
-   
+   int adj_count;
     for (size_t i = 0; i < T.size(); i++) T[i].n=i;    //triangle id    
     //triangles that share the same edge
     for (size_t j = 0; j < vec_edgs.size(); j++)
     {
-        int adj_count=0;
+        adj_count=0;
         for (size_t i = 0; i < T.size(); i++)
         {
             if(edgeInTriangle(vec_edgs[j], T[i]))
@@ -240,10 +240,10 @@ std::vector<Triangle> Delauney_Disk(std::vector<Triangle> &T){
     float radius_left,radius_right;
     Triangle *l,*r;
     Edge e;
-    //get the circum cencet (x,y) of all triangles
+    //get the circum center (x,y) and radius of all the triangles
     for (size_t i = 0; i < T.size(); i++)
         T[i].center = circumCenter(T[i].pi, T[i].pj, T[i].pk,T[i].radius);
-        //circumcenter
+    //find adjcant triangles
     adjacent_tringle(vec_edgs, T);
     bool check=false;
     while(!check)
@@ -257,31 +257,29 @@ std::vector<Triangle> Delauney_Disk(std::vector<Triangle> &T){
                 // if the triangle has a right and left adjacent triangle
                 if(r != NULL && l != NULL){
                     // Find point in the right triangle that is opposite to sharing edge
-                    //if the point pi or pj or pk is not in edge e then the point is on the opposite  to current edge
+                    //if the point pi or pj or pk is not in edge e then the point is on the opposite  to current sharing edge
                     if(r->pi.n != e.start.n && r->pi.n != e.dest.n ) 
                         p_c = r->pi;
                     else if(r->pj.n != e.start.n && r->pj.n != e.dest.n ) 
                         p_c = r->pj;
                     else 
                         p_c = r->pk;
-                        //Find point in left triangle that is opposite to edge
+                        //Find point in left triangle that is opposite to the sharing edge
                     if(l->pi.n != e.start.n && l->pi.n != e.dest.n ) 
                         p_d = l->pi;
                     else if(l->pj.n != e.start.n && l->pj.n != e.dest.n ) 
                         p_d = l->pj;
                     else 
                         p_d = l->pk;
-
-                    // check point of the right triagle if it is inside left triangle;
                     radius_left = get_distance(l->center, p_c);
                     //distance between the point of the right triangle and center of the triagle
                     radius_right = get_distance(r->center, p_d);
                     //if point p_c or p_d is inside triangle then there is violation of Delauny Disk
                     if(radius_left < l->radius || radius_right < r->radius){
                         updateTriangle(T, vec_edgs[i],p_c,p_d);
-                        vec_edgs.clear();//remove all element from a vector
+                        vec_edgs.clear();//remove all elements from a vector
                         adjacent_tringle(vec_edgs,T);//get new edges from updated Triangle
-                        check =false;
+                        check = false;
                     }
                 }
             }
